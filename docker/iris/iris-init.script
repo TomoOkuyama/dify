@@ -1,0 +1,16 @@
+// Switch to %SYS namespace for system configuration
+set $namespace="%SYS"
+
+// Set passwords to never expire for all predefined users (default password is SYS)
+WRITE "Executing UnExpireUserPasswords...",!
+Do ##class(Security.Users).UnExpireUserPasswords("*")
+WRITE "UnExpireUserPasswords completed",!
+
+// Change _SYSTEM user password to Dify@1234
+NEW props, sc
+WRITE "Changing _SYSTEM password...",!
+SET props("Password") = "Dify@1234"
+SET sc = ##class(Security.Users).Modify("_SYSTEM", .props)
+WRITE "Change _SYSTEM password: ", $SYSTEM.Status.GetErrorText(sc),!
+
+halt
